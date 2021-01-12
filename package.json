@@ -34,7 +34,8 @@
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "redux-thunks": "^1.0.0"
+    "redux-thunks": "^1.0.0",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"
