@@ -22,8 +22,8 @@ const Profile = (props) => {
   const { currentUser, posts } = props;
 
   useEffect(() => {
+    // Fetchin User on Start
     const { currentUser, posts } = props;
-    console.log({ currentUser, posts });
 
     if (props.route.params.uid === firebase.auth().currentUser.uid) {
       // Current user is self
@@ -65,9 +65,38 @@ const Profile = (props) => {
           setUserPosts(posts);
         });
     }
-  }, [props.route.params.uid]);
+    // Validating if Already Following User
+    if (props.following.indexOf(props.route.params.uid) > -1) {
+      setIsFollowing(true);
+    } else {
+      setIsFollowing(false);
+    }
+  }, [props.route.params.uid, props.following]);
+
+  const onFollow = () => {
+    // Follow
+    firebase
+      .firestore()
+      .collection("following")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("userFollowing")
+      .doc(props.route.params.uid)
+      .set({});
+  };
+
+  const onUnfollow = () => {
+    // UnFollow
+    firebase
+      .firestore()
+      .collection("following")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("userFollowing")
+      .doc(props.route.params.uid)
+      .delete();
+  };
 
   if (user === null) {
+    // User didnt initialize yet
     return <View />;
   }
 
@@ -100,20 +129,26 @@ const Profile = (props) => {
             <View style={styles.followBtn}>
               {isFollowing ? ( // already following that user
                 <TouchableOpacity
+                  onPress={() => onUnfollow()}
                   style={{
                     backgroundColor: "white",
                     padding: 8,
                     borderRadius: 5,
+                    minWidth: 100,
+                    alignItems: "center",
                   }}>
                   <Text style={{ color: COLORS.primary }}>Following</Text>
                 </TouchableOpacity>
               ) : (
                 // not following that user
                 <TouchableOpacity
+                  onPress={() => onFollow()}
                   style={{
                     backgroundColor: "rgba(140, 187, 250, 0.48)",
                     padding: 8,
                     borderRadius: 5,
+                    minWidth: 100,
+                    alignItems: "center",
                   }}>
                   <Text style={{ color: "white" }}>Follow</Text>
                 </TouchableOpacity>
@@ -193,6 +228,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,
   posts: store.userState.posts,
+  following: store.userState.following,
 });
 
 export default connect(mapStateToProps, null)(Profile);
