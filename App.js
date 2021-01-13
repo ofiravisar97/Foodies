@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { COLORS } from "../Foodies/src/Colors";
 import { View, Text, Platform, TouchableOpacity, LogBox } from "react-native";
+import { enableScreens } from "react-native-screens";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import * as firebase from "firebase";
+import firebase from "firebase";
 
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -30,6 +31,8 @@ const firebaseConfig = {
   measurementId: "G-8GCV4GS9XC",
 };
 
+enableScreens(true);
+
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -37,8 +40,6 @@ if (firebase.apps.length === 0) {
 const Stack = createStackNavigator();
 
 export default function App({ navigation }) {
-  LogBox.ignoreAllLogs();
-
   const [loaded, setLoaded] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 

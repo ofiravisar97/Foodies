@@ -7,10 +7,12 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
 import { COLORS } from "../../Colors";
+import Post from "../Post";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
@@ -102,6 +104,7 @@ const Profile = (props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={COLORS.primary} barStyle='light-content' />
       <View style={styles.topView}>
         <View style={styles.nameContainer}>
           <Text
@@ -162,21 +165,7 @@ const Profile = (props) => {
         <FlatList
           numColumns={1}
           data={userPosts}
-          renderItem={({ item }) => (
-            <TouchableOpacity activeOpacity={0.9}>
-              <View style={styles.postContainer}>
-                <Text style={styles.recipeTitle}>{item.title}</Text>
-                <Text style={{}}>{item.creation.toDate().toDateString()}</Text>
-                <Image
-                  source={{ uri: item.downloadURL }}
-                  style={{
-                    flex: 1,
-                    aspectRatio: 1 / 1,
-                    borderRadius: 15,
-                  }}></Image>
-              </View>
-            </TouchableOpacity>
-          )}
+          renderItem={({ item }) => <Post post={item} />}
         />
       </View>
     </View>
